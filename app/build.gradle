@@ -1,5 +1,14 @@
 apply plugin: 'com.android.application'
 
+def getAlphaVantageApiKey() {
+    def Properties props = new Properties()
+    try {
+        props.load(new FileInputStream(project.file('secrets.properties')))
+    } catch (Exception e) {
+        return ""
+    }
+    return props['ALPHA_VANTAGE_API_KEY']
+}
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -12,8 +21,12 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField "String", "ALPHA_VANTAGE_API_KEY", "\"" + getAlphaVantageApiKey() +"\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "String", "ALPHA_VANTAGE_API_KEY", "\"" + getAlphaVantageApiKey() +"\""
         }
     }
 }
@@ -25,4 +38,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.google.code.gson:gson:2.8.2'
 }
