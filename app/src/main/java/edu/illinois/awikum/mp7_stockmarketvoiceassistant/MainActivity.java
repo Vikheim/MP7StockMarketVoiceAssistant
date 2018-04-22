@@ -72,20 +72,19 @@ public final class MainActivity extends AppCompatActivity {
 
         // Set up the queue for our API requests
         requestQueue = Volley.newRequestQueue(this);
-        //for (String i: getTicker()) {
+
             setCompanyCode("MSFT");
             Log.d(TAG, "HERE");
         final Button button = findViewById(R.id.button17);
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(final View v) {
                 startAPICall();
-
             }
         });
 
         Log.d(TAG, "HERE2");
-        //}
     }
 
     /**
@@ -96,6 +95,10 @@ public final class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    /**
+     * Uses jsonManipulator library to extract relevant information from JSON response.
+     * @param jsonResult Json toString() of financial data.
+     */
     protected void processFinDataJson(final String jsonResult) {
         timeStamp = jsonManipulator.getTimeStamp(jsonResult);
         close = jsonManipulator.getClose(jsonResult, timeStamp);
