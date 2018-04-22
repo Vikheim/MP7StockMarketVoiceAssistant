@@ -32,6 +32,8 @@ import java.util.Locale;
 
 import edu.illinois.awikum.lib.jsonManipulator;
 
+import static edu.illinois.awikum.lib.jsonManipulator.getTimeStamp;
+
 public final class MainActivity extends AppCompatActivity {
     /** Default logging tag for messages from the main activity. */
     private static final String TAG = "MP7:Main";
@@ -41,6 +43,11 @@ public final class MainActivity extends AppCompatActivity {
     private String[] ticker = {"GSPC","IXIC","GOOG","AAPL","MSFT","EEM","EFA","SPY"};
     /** Individual company data request */
     private String companyCode = "";
+
+
+    public String timeStamp;
+    public String high;
+    public String close;
 
     public void setCompanyCode(final String newCode) {
         companyCode = newCode;
@@ -72,8 +79,8 @@ public final class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Log.d(TAG, "Updating Weather");
                 startAPICall();
+
             }
         });
 
@@ -87,6 +94,12 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    protected void processFinDataJson(final String jsonResult) {
+        timeStamp = jsonManipulator.getTimeStamp(jsonResult);
+        close = jsonManipulator.getClose(jsonResult, timeStamp);
+        Log.d(TAG, (timeStamp + "\n" + close));
     }
 
     /**
@@ -103,8 +116,9 @@ public final class MainActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(final JSONObject response) {
                             try {
+                                processFinDataJson(response.toString());
                                 Log.d(TAG, response.toString(2));
-                                Log.d(TAG, jsonManipulator.getTimeStamp(response.toString()));
+
                             } catch (JSONException ignored) { }
                         }
                     }, new Response.ErrorListener() {
