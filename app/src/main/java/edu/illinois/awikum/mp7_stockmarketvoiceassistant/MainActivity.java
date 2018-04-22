@@ -23,11 +23,35 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import edu.illinois.awikum.lib.jsonManipulator;
+
+public final class MainActivity extends AppCompatActivity {
     /** Default logging tag for messages from the main activity. */
     private static final String TAG = "MP7:Main";
     /** Request queue for our API requests. */
     private static RequestQueue requestQueue;
+    /** Common company data to display on launch. */
+    private String[] ticker = {"GSPC","IXIC","GOOG","AAPL","MSFT","EEM","EFA","SPY"};
+    /** Individual company data request */
+    private String companyCode = "";
+
+    public void setCompanyCode(final String newCode) {
+        companyCode = newCode;
+    }
+    public String getCompanyCode() {
+        return companyCode;
+    }
+    public String[] getTicker() {
+        return ticker;
+    }
+
 
     /**
      * Run when this activity comes to the foreground.
@@ -41,6 +65,20 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up the queue for our API requests
         requestQueue = Volley.newRequestQueue(this);
+        //for (String i: getTicker()) {
+            setCompanyCode("MSFT");
+            Log.d(TAG, "HERE");
+        final Button button = findViewById(R.id.button17);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Log.d(TAG, "Updating Weather");
+                startAPICall();
+            }
+        });
+
+        Log.d(TAG, "HERE2");
+        //}
     }
 
     /**
@@ -58,8 +96,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" //ADD COMPANY NAME
-                    + "&apikey=" + BuildConfig.ALPHA_VANTAGE_API_KEY,
+                    "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=60min&apikey=" + BuildConfig.ALPHA_VANTAGE_API_KEY,
 
                     null,
                     new Response.Listener<JSONObject>() {
@@ -67,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onResponse(final JSONObject response) {
                             try {
                                 Log.d(TAG, response.toString(2));
+                                Log.d(TAG, jsonManipulator.getTimeStamp(response.toString()));
                             } catch (JSONException ignored) { }
                         }
                     }, new Response.ErrorListener() {
