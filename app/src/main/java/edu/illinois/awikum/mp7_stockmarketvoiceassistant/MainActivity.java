@@ -105,6 +105,10 @@ public final class MainActivity extends AppCompatActivity {
         Log.d(TAG, (timeStamp + "\n" + close));
     }
 
+    public static class PlaceholderFragment extends Fragment {
+
+    }
+
     /**
      * Make a call to the Alpha Vantage API.
      */

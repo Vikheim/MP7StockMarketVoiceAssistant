@@ -9,6 +9,7 @@ def getAlphaVantageApiKey() {
     }
     return props['ALPHA_VANTAGE_API_KEY']
 }
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -21,12 +22,12 @@ android {
     }
     buildTypes {
         release {
-            buildConfigField "String", "ALPHA_VANTAGE_API_KEY", "\"" + getAlphaVantageApiKey() +"\""
+            buildConfigField "String", "ALPHA_VANTAGE_API_KEY", "\"" + getAlphaVantageApiKey() + "\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "ALPHA_VANTAGE_API_KEY", "\"" + getAlphaVantageApiKey() +"\""
+            buildConfigField "String", "ALPHA_VANTAGE_API_KEY", "\"" + getAlphaVantageApiKey() + "\""
         }
     }
 }
